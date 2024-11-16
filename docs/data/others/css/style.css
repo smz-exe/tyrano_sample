@@ -1,0 +1,95 @@
+/* 全体のスタイル設定 */
+.container {
+    position: fixed !important;
+    width: 1280px;
+    height: 720px;
+    display: flex;
+    justify-content: center; /* 水平方向の中央揃え */
+    align-items: center; /* 垂直方向の中央揃え */
+    font-family: Arial, sans-serif; /* 全体のフォント */
+    margin: auto;
+}
+
+/* コンテンツのスタイル */
+#content {
+    text-align: center;
+    font-size: 64px;
+    background-color: #f9f9f9;
+}
+
+/* タイマーやスコアのスタイル */
+#timer {
+    font-size: 30px;
+    color: blue;
+    margin-bottom: 10px;
+}
+
+#score {
+    font-size: 30px;
+    color: green;
+    margin-bottom: 10px;
+}
+
+/* 単語表示部分 */
+#display_word {
+    margin-bottom: 10px;
+}
+
+#display_roman {
+    font-size: 32px;
+    color: gray;
+}
+
+/* 入力欄 */
+#user_input {
+    font-size: 32px;
+    width: 300px;
+    padding: 5px;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 色分け結果表示のスタイル */
+#colored_input {
+    font-size: 30px;
+    margin-top: 20px;
+    white-space: pre;
+    height: 40px; /* 高さを固定 */
+    overflow: hidden; /* はみ出した内容を非表示にする */
+}
+
+/* エラーメッセージのスタイル */
+#error_message {
+    font-size: 20px;
+    color: red; /* メッセージの色 */
+    background-color: #ffe6e6; /* 背景色 */
+    border: 1px solid red; /* 枠線 */
+    padding: 8px 12px; /* パディング */
+    border-radius: 5px; /* 角丸 */
+    display: block; /* 幅を親要素に合わせる */
+    height: 40px; /* 高さを固定 */
+    line-height: 40px; /* 縦方向のテキスト中央揃え */
+    text-align: center; /* テキストを中央揃え */
+    visibility: hidden; /* 初期状態で非表示（スペースを確保） */
+    opacity: 0; /* 初期状態で透明 */
+    transition: opacity 0.3s ease-in-out; /* 表示/非表示のアニメーション */
+}
+
+#error_message.visible {
+    visibility: visible; /* 表示状態 */
+    opacity: 1; /* 不透明にする */
+}
+
+/* アニメーションの定義 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

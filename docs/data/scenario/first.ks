@@ -4,6 +4,7 @@
 [title name="AM8:57"]
 @hidemenubutton
 [start_keyconfig]
+[loadcss file="./data/others/css/style.css"]
 
 ;メッセージウィンドウの設定
 [position layer="message0" left=160 top=500 width=1000 height=200 page=fore visible=true]
@@ -36,7 +37,6 @@
 [image layer=1 storage=title.png visible=true top=272 left=366 ]
 ;ボタンの設定
 [button x=490 y=545 graphic="StartButton.png" target=*first]
-
 [s]
 
 ; ゲーム開始
@@ -48,14 +48,194 @@
 @showmenubutton
 
 ;背景画像の設定
-[bg layer="base" storage="yellow_background.jpeg" time="100"]
+[bg layer="base" storage="Background.png" time="100"]
 
+
+[html name=container]
+<!-- 画面中央にタイマーとランダムな単語を出題 -->
+<div id="content">
+  <p id="timer">残り時間: 60秒</p>
+  <p id="score">正解数: 0 / 10</p>
+  <p id="display_word">超伝導</p>
+  <p id="display_roman">tyoudendou</p>
+  <input type="text" id="user_input" autocomplete="off">
+  <div id="colored_input"></div>
+  <p id="error_message"></p>
+</div>
+[endhtml]
+
+[iscript]
+// 単語リスト
+const wordList = [
+    { kanji: "超伝導", roman: ["tyoudendou","choudendou"] },
+    { kanji: "量子力学", roman: ["ryousirikigaku", "ryoushirikigaku"] },
+    { kanji: "人工知能", roman: ["jinkoutinou","jinkouchinou"] },
+    { kanji: "機械学習", roman: ["kikaigakusyuu", "kikaigakushuu"] },
+    { kanji: "深層学習", roman: ["sinsougakusyuu","shinsougakushuu"] },
+    { kanji: "実験目的", roman: ["jikkenmokuteki"] },
+    { kanji: "実験原理", roman: ["jikkengenri"] },
+    { kanji: "実験方法", roman: ["jikkenhouhou"] },
+    { kanji: "実験結果", roman: ["jikkenkekka"] },
+    { kanji: "考察", roman: ["kousatu", "kosatsu"] },
+    { kanji: "結論", roman: ["keturon","ketsuron"] },
+    { kanji: "参考文献", roman: ["sankoubunken"] }
+];
+
+// 現在の単語
+let currentWord;
+// 現在表示中のローマ字候補
+let currentRomanCandidate;
+
+let correctCount = 0;
+
+// タイマー
+let timeLeft = 600000;
+let timerInterval;
+
+const stopTimer = () => {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+};
+
+const focusInput = () => $('#user_input').focus();
+
+// ランダムに単語を選ぶ関数
+const selectRandomWord = () => {
+  const randomIndex = Math.floor(Math.random() * wordList.length);
+  currentWord = wordList[randomIndex];
+  currentRomanCandidate = currentWord.roman[0]; // デフォルト候補を選択
+  $('#display_word').text(currentWord.kanji); // 日本語を表示
+  $('#display_roman').text(currentRomanCandidate); // デフォルトのローマ字を表示
+  $('#user_input').val(""); // 入力欄をクリア
+  $('#colored_input').html(""); // 色分け結果をクリア
+  $('#error_message').hide(); // エラーメッセージを非表示
+};
+
+const startTimer = () => {
+  timerInterval = setInterval(() => {
+    timeLeft -= 1;
+    $('#timer').text(`残り時間: ${timeLeft}秒`);
+    if (timeLeft <= 0) {
+      stopTimer(); // タイマーを停止
+      alert("時間切れです！");
+      TYRANO.kag.ftag.startTag("jump", { target: "*timeout" });
+    }
+  }, 1000);
+};
+
+// 初期化処理
+$(document).ready(() => {
+  selectRandomWord();
+  focusInput();
+  startTimer();
+});
+
+const updateScore = () => {
+  correctCount += 1;
+  $('#score').text(`正解数: ${correctCount} / 10`);
+  if (correctCount >= 10) {
+    stopTimer(); // タイマー停止
+    TYRANO.kag.ftag.startTag("jump", { target: "*clear" }); // クリア画面に移行
+  }
+};
+
+// 入力が別解かどうかを判定する関数
+const checkAlternateRoman = (input) => {
+  return currentWord.roman.find((r) => r.startsWith(input));
+};
+
+// リアルタイムで入力をチェック
+$('#user_input').on('input', function () {
+  const userInput = $(this).val(); // ユーザーの入力値を取得
+  const coloredInputDiv = $('#colored_input'); // 色分け結果を表示するエリア
+  const errorMessage = $('#error_message'); // エラーメッセージエリア
+
+  errorMessage.hide();
+
+  // 入力が現在の候補に一致しない場合、別解をチェック
+  if (!currentRomanCandidate.startsWith(userInput)) {
+    const alternateRoman = checkAlternateRoman(userInput);
+    if (alternateRoman) {
+      currentRomanCandidate = alternateRoman; // 表示候補を変更
+      $('#display_roman').text(currentRomanCandidate); // 表示を更新
+    }
+}
+
+  let coloredHTML = "";
+
+  for (let i = 0; i < currentRomanCandidate.length; i++) {
+    if (i < userInput.length) {
+      if (userInput[i] === currentRomanCandidate[i]) {
+        // 正しい文字
+        coloredHTML += `<span style="color: green; transition: all 0.2s;">${userInput[i]}</span>`;
+      } else {
+        // 間違った文字
+        coloredHTML += `<span style="color: red; transition: all 0.2s;">${userInput[i]}</span>`;
+      }
+    } else if (i === userInput.length) {
+      // 現在のカーソル位置
+      coloredHTML += `<span style="color: blue; text-decoration: underline; transition: all 0.2s;">${currentRomanCandidate[i]}</span>`;
+    } else {
+      // 未入力部分
+      coloredHTML += `<span style="color: gray; transition: all 0.2s;">${currentRomanCandidate[i]}</span>`;
+    }
+  }
+
+  coloredInputDiv.html(coloredHTML);
+
+  // 正解した場合の処理
+  if (currentWord.roman.includes(userInput)) {
+    updateScore(); // 正解数を更新
+    selectRandomWord(); // 次の単語を出題
+    focusInput();
+  }
+});
+
+// 入力エラーハンドリング（文字数制限）
+$('#user_input').on('keypress', function (e) {
+  const userInput = $(this).val();
+  const maxRomanLength = Math.max(...currentWord.roman.map(r => r.length));
+  const errorMessage = $('#error_message'); // エラーメッセージエリア
+
+  if (userInput.length >= maxRomanLength && e.keyCode !== 8) {
+    e.preventDefault(); // 入力を無効化
+
+    // エラーメッセージを表示
+    errorMessage.text("これ以上は入力出来ません");
+    errorMessage.addClass('visible'); // visibleクラスを追加して表示
+    focusInput(); // フォーカスを戻す
+  } else {
+    // 入力が正常な場合、エラーメッセージを非表示
+    errorMessage.removeClass('visible'); // visibleクラスを削除
+  }
+});
+[endscript]
+[s]
+
+
+*clear
+[cm]
 @layopt layer=message0 visible=true
+おめでとうございます！10単語を1分以内に入力できました！[p]
+[call target=*correct]
 
 
-メロスは激怒した.[l][r]
+*timeout
+[cm]
+@layopt layer=message0 visible=true
+残念！時間切れです。また挑戦してください。[p]
+[call target=*correct]
 
-必ず、かの邪智暴虐の王を除かねばならぬと決意した。[p]
+
+*correct
+[cm]
+@layopt layer=message0 visible=true
+素晴らしい！正しく入力できました。[p]
+
+[emb exp="f.player_name"] は、王を討つために旅立った。[p]
+
 
 [iscript]
 f.num = 10
@@ -72,10 +252,28 @@ f.piの内容: [emb exp="f.pi"][p]
 
 [layopt layer="0" visible=true]
 [image storage="folder1/icon1.png" layer="0" x="540" y="300" name="icon1" time="100" width="100" height="100" ]
-[s]
+
+[wait time=200]
+[cm]
+
+サブルーチンを呼び出します。[l][r]
+
+[call target=*subroutine]
+
+サブルーチンを呼び出しました。[p]
+[call target=*body]
 
 
+*subroutine
 
+これはサブルーチンです。[l][r]
+
+クリックをすると呼び出し元に戻ります。[p]
+
+[return]
+
+
+*body
 選択肢を表示します。[l][r]
 
 [link target=*select_1]【1】選択肢 その1  [endlink][r]
@@ -101,8 +299,8 @@ f.piの内容: [emb exp="f.pi"][p]
 好きな方を選んでください。[l][r]
 
 [locate x=100 y=200]
-[button graphic="icon1.png" target=*tag_1]
-[button x=300 y=200 graphic="icon2.png" target=*tag_2]
+[button graphic="icon1.png" target=*tag_1 width=100 height=100]
+[button x=300 y=200 graphic="icon2.png" target=*tag_2 width=100 height=100]
 [s]
 
 *tag_1
