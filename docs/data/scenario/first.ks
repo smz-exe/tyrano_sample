@@ -93,8 +93,8 @@
 
 @layopt layer=message0 visible=false
 
-[camera layer=1 wait=true zoom=2 x=360 y=50 ease_type=ease-in time=400]
-[layermode_movie video=concentration-line03-bk.mp4 width=640 height=360]
+[camera layer=1 wait=false zoom=2 x=360 y=50 ease_type=ease-in time=400]
+[layermode_movie video="concentration-line03-bk.mp4" width=640 height=360]
 
 @layopt layer=message0 visible=true
 
@@ -114,8 +114,8 @@
 
 @layopt layer=message0 visible=false
 
-[camera layer=1 wait=true zoom=2 x=360 y=-300 ease_type=ease-in time=400]
-[layermode_movie video=concentration-line03-bk.mp4 width=640 height=360]
+[camera layer=1 wait=false zoom=2 x=360 y=-300 ease_type=ease-in time=400]
+[layermode_movie video="concentration-line03-bk.mp4" width=640 height=360]
 
 @layopt layer=message0 visible=true
 
