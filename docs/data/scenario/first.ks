@@ -18,7 +18,7 @@
 ;キャラクターの名前が表示される文字領域
 [ptext name="chara_name_area" layer="message0" color="white" size=28 bold=true x=180 y=510]
 
-;上記で定義した領域がキャラクターの名前表示であることを宣言（これがないと#の部分でエラーになります）
+;上記で定義した領域がキャラクターの名前表示であることを宣言
 [chara_config ptext="chara_name_area"]
 
 ;このゲームで登場するキャラクターを宣言
@@ -50,12 +50,15 @@
 ;背景画像の設定
 [bg layer="base" storage="Background.png" time="100"]
 
+@layopt layer=message0 visible=true
+
+
 
 [html name=container]
 <!-- 画面中央にタイマーとランダムな単語を出題 -->
 <div id="content">
-  <p id="timer">残り時間: 60秒</p>
-  <p id="score">正解数: 0 / 10</p>
+  <p id="timer">残り時間: 600秒</p>
+  <p id="score">正解数: 0 / 30</p>
   <p id="display_word">超伝導</p>
   <p id="display_roman">tyoudendou</p>
   <input type="text" id="user_input" autocomplete="off">
@@ -65,60 +68,100 @@
 [endhtml]
 
 [iscript]
-// 単語リスト
-const wordList = [
-    { kanji: "超伝導", roman: ["tyoudendou","choudendou"] },
-    { kanji: "量子力学", roman: ["ryousirikigaku", "ryoushirikigaku"] },
-    { kanji: "人工知能", roman: ["jinkoutinou","jinkouchinou"] },
-    { kanji: "機械学習", roman: ["kikaigakusyuu", "kikaigakushuu"] },
-    { kanji: "深層学習", roman: ["sinsougakusyuu","shinsougakushuu"] },
-    { kanji: "実験目的", roman: ["jikkenmokuteki"] },
-    { kanji: "実験原理", roman: ["jikkengenri"] },
-    { kanji: "実験方法", roman: ["jikkenhouhou"] },
-    { kanji: "実験結果", roman: ["jikkenkekka"] },
-    { kanji: "考察", roman: ["kousatu", "kosatsu"] },
-    { kanji: "結論", roman: ["keturon","ketsuron"] },
-    { kanji: "参考文献", roman: ["sankoubunken"] }
+// 固定の単語リスト
+const fixedWords = {
+  1: { kanji: "実験目的", roman: ["jikkenmokuteki", "jikkennmokuteki"] },
+  5: { kanji: "実験原理", roman: ["jikkengenri", "jikkenngenri"] },
+  9: { kanji: "実験方法", roman: ["jikkenhouhou", "jikkennhouhou"] },
+  13: { kanji: "実験結果", roman: ["jikkenkekka", "jikkennkekka"] },
+  18: { kanji: "考察", roman: ["kousatu", "kosatsu"] },
+  24: { kanji: "結論", roman: ["keturonn", "ketsuronn"] },
+  28: { kanji: "参考文献", roman: ["sankoubunkenn", "sannkoubunnkenn"] },
+};
+
+// ランダムに選ばれる単語リスト
+const randomWords = [
+  { kanji: "超伝導", roman: ["tyoudendou", "choudendou"] },
+  { kanji: "量子力学", roman: ["ryousirikigaku", "ryoushirikigaku"] },
+  { kanji: "人工知能", roman: ["jinkoutinou", "jinkouchinou"] },
+  { kanji: "機械学習", roman: ["kikaigakusyuu", "kikaigakushuu"] },
+  { kanji: "深層学習", roman: ["sinsougakusyuu", "shinsougakushuu"] },
 ];
 
-// 現在の単語
-let currentWord;
-// 現在表示中のローマ字候補
-let currentRomanCandidate;
+// 現在の問題番号
+let currentQuestionIndex = 1;
 
+// 現在の正解数
 let correctCount = 0;
 
 // タイマー
-let timeLeft = 600000;
+let timeLeft = 600;
 let timerInterval;
 
+// タイマーを停止する関数
 const stopTimer = () => {
   if (timerInterval) {
     clearInterval(timerInterval);
     timerInterval = null;
   }
+  // 残り時間をスコアとして保存
+  TYRANO.kag.variable.sf.score = timeLeft; // ティラノスクリプトの変数にスコアを保存
 };
 
+// テキストボックスにフォーカスを当てる
 const focusInput = () => $('#user_input').focus();
 
-// ランダムに単語を選ぶ関数
-const selectRandomWord = () => {
-  const randomIndex = Math.floor(Math.random() * wordList.length);
-  currentWord = wordList[randomIndex];
-  currentRomanCandidate = currentWord.roman[0]; // デフォルト候補を選択
-  $('#display_word').text(currentWord.kanji); // 日本語を表示
-  $('#display_roman').text(currentRomanCandidate); // デフォルトのローマ字を表示
-  $('#user_input').val(""); // 入力欄をクリア
-  $('#colored_input').html(""); // 色分け結果をクリア
-  $('#error_message').hide(); // エラーメッセージを非表示
+// 出題リストを作成
+const createQuestionList = () => {
+  const questionList = [];
+  const randomPool = [...randomWords]; // ランダム単語のコピー
+
+  for (let i = 1; i <= 30; i++) {
+    if (fixedWords[i]) {
+      questionList.push(fixedWords[i]); // 固定単語を追加
+    } else {
+      // ランダム単語を選択
+      const randomIndex = Math.floor(Math.random() * randomPool.length);
+      questionList.push(randomPool.splice(randomIndex, 1)[0]); // ランダムに選んで削除
+      if (randomPool.length === 0) randomPool.push(...randomWords); // ランダムプールを補充
+    }
+  }
+
+  return questionList;
 };
 
+// 問題リストを生成
+const questionList = createQuestionList();
+
+// 現在の問題
+let currentWord;
+
+// 次の問題を選ぶ関数
+const selectNextWord = () => {
+  if (currentQuestionIndex > questionList.length) {
+    stopTimer();
+    TYRANO.kag.ftag.startTag("jump", { target: "*clear" }); // ゲームクリア
+    return;
+  }
+
+  currentWord = questionList[currentQuestionIndex - 1]; // 現在の問題を更新
+  currentRomanCandidate = currentWord.roman[0]; // デフォルト候補を設定
+  $('#display_word').text(currentWord.kanji); // 日本語を表示
+  $('#display_roman').text(currentRomanCandidate); // ローマ字を表示
+  $('#user_input').val(""); // 入力欄をクリア
+  $('#colored_input').html(""); // 色分け結果をクリア
+  $('#error_message').css('visibility', 'hidden').css('opacity', 0); // エラーメッセージを非表示
+
+  currentQuestionIndex += 1; // 問題番号を進める
+};
+
+// タイマーを開始する関数
 const startTimer = () => {
   timerInterval = setInterval(() => {
     timeLeft -= 1;
     $('#timer').text(`残り時間: ${timeLeft}秒`);
     if (timeLeft <= 0) {
-      stopTimer(); // タイマーを停止
+      stopTimer();
       alert("時間切れです！");
       TYRANO.kag.ftag.startTag("jump", { target: "*timeout" });
     }
@@ -127,24 +170,32 @@ const startTimer = () => {
 
 // 初期化処理
 $(document).ready(() => {
-  selectRandomWord();
+  currentWord = null;
+  selectNextWord();
   focusInput();
   startTimer();
 });
 
+// 正解数を更新する関数
 const updateScore = () => {
   correctCount += 1;
-  $('#score').text(`正解数: ${correctCount} / 10`);
-  if (correctCount >= 10) {
-    stopTimer(); // タイマー停止
-    TYRANO.kag.ftag.startTag("jump", { target: "*clear" }); // クリア画面に移行
-  }
+  $('#score').text(`正解数: ${correctCount} / 30`);
 };
 
-// 入力が別解かどうかを判定する関数
-const checkAlternateRoman = (input) => {
-  return currentWord.roman.find((r) => r.startsWith(input));
-};
+// 入力エラーハンドリング（文字数制限）
+$('#user_input').on('keydown', function (e) {
+  const userInput = $(this).val();
+  const maxRomanLength = Math.max(...currentWord.roman.map((r) => r.length)); // 最大文字数
+  const errorMessage = $('#error_message'); // エラーメッセージエリア
+
+  if (userInput.length >= maxRomanLength && e.key !== 'Backspace') {
+    e.preventDefault(); // 入力を無効化
+    errorMessage.text("これ以上は入力出来ません");
+    errorMessage.css('visibility', 'visible').css('opacity', 1); // 表示
+  } else {
+    errorMessage.css('visibility', 'hidden').css('opacity', 0); // 非表示
+  }
+});
 
 // リアルタイムで入力をチェック
 $('#user_input').on('input', function () {
@@ -152,63 +203,39 @@ $('#user_input').on('input', function () {
   const coloredInputDiv = $('#colored_input'); // 色分け結果を表示するエリア
   const errorMessage = $('#error_message'); // エラーメッセージエリア
 
-  errorMessage.hide();
+  // 入力が正常な場合、エラーメッセージを非表示
+  errorMessage.css('visibility', 'hidden').css('opacity', 0);
 
   // 入力が現在の候補に一致しない場合、別解をチェック
   if (!currentRomanCandidate.startsWith(userInput)) {
-    const alternateRoman = checkAlternateRoman(userInput);
+    const alternateRoman = currentWord.roman.find((r) => r.startsWith(userInput));
     if (alternateRoman) {
       currentRomanCandidate = alternateRoman; // 表示候補を変更
       $('#display_roman').text(currentRomanCandidate); // 表示を更新
     }
-}
+  }
 
   let coloredHTML = "";
 
   for (let i = 0; i < currentRomanCandidate.length; i++) {
     if (i < userInput.length) {
-      if (userInput[i] === currentRomanCandidate[i]) {
-        // 正しい文字
-        coloredHTML += `<span style="color: green; transition: all 0.2s;">${userInput[i]}</span>`;
-      } else {
-        // 間違った文字
-        coloredHTML += `<span style="color: red; transition: all 0.2s;">${userInput[i]}</span>`;
-      }
+      coloredHTML += userInput[i] === currentRomanCandidate[i]
+        ? `<span style="color: green;">${userInput[i]}</span>`
+        : `<span style="color: red;">${userInput[i]}</span>`;
     } else if (i === userInput.length) {
-      // 現在のカーソル位置
-      coloredHTML += `<span style="color: blue; text-decoration: underline; transition: all 0.2s;">${currentRomanCandidate[i]}</span>`;
+      coloredHTML += `<span style="color: blue; text-decoration: underline;">${currentRomanCandidate[i]}</span>`;
     } else {
-      // 未入力部分
-      coloredHTML += `<span style="color: gray; transition: all 0.2s;">${currentRomanCandidate[i]}</span>`;
+      coloredHTML += `<span style="color: gray;">${currentRomanCandidate[i]}</span>`;
     }
   }
 
   coloredInputDiv.html(coloredHTML);
 
   // 正解した場合の処理
-  if (currentWord.roman.includes(userInput)) {
-    updateScore(); // 正解数を更新
-    selectRandomWord(); // 次の単語を出題
+  if (currentWord.roman.some((r) => r === userInput)) {
+    updateScore();
+    selectNextWord();
     focusInput();
-  }
-});
-
-// 入力エラーハンドリング（文字数制限）
-$('#user_input').on('keypress', function (e) {
-  const userInput = $(this).val();
-  const maxRomanLength = Math.max(...currentWord.roman.map(r => r.length));
-  const errorMessage = $('#error_message'); // エラーメッセージエリア
-
-  if (userInput.length >= maxRomanLength && e.keyCode !== 8) {
-    e.preventDefault(); // 入力を無効化
-
-    // エラーメッセージを表示
-    errorMessage.text("これ以上は入力出来ません");
-    errorMessage.addClass('visible'); // visibleクラスを追加して表示
-    focusInput(); // フォーカスを戻す
-  } else {
-    // 入力が正常な場合、エラーメッセージを非表示
-    errorMessage.removeClass('visible'); // visibleクラスを削除
   }
 });
 [endscript]
@@ -218,37 +245,23 @@ $('#user_input').on('keypress', function (e) {
 *clear
 [cm]
 @layopt layer=message0 visible=true
-おめでとうございます！10単語を1分以内に入力できました！[p]
+終わった！締め切りまでにレポートを書き上げた！[l][r]
+まだあと[emb exp="sf.score"]秒残ってる！[p]
 [call target=*correct]
 
 
 *timeout
 [cm]
 @layopt layer=message0 visible=true
-残念！時間切れです。また挑戦してください。[p]
+あぁ、遅レポが確定してしまった...[p]
 [call target=*correct]
 
 
 *correct
 [cm]
 @layopt layer=message0 visible=true
-素晴らしい！正しく入力できました。[p]
+テスト終了[p]
 
-[emb exp="f.player_name"] は、王を討つために旅立った。[p]
-
-
-[iscript]
-f.num = 10
-f.hello = "Hello, World!"
-f.pi = 3.141592653589793
-[endscript]
-
-[eval exp="f.num2 = f.num * f.pi"]
-
-f.numの内容: [emb exp="f.num"][l][r]
-f.helloの内容: [emb exp="f.hello"][l][r]
-f.piの内容: [emb exp="f.pi"][p]
-演算の結果: [emb exp="f.num2"][l][r]
 
 [layopt layer="0" visible=true]
 [image storage="folder1/icon1.png" layer="0" x="540" y="300" name="icon1" time="100" width="100" height="100" ]

@@ -19,13 +19,13 @@
 
 /* タイマーやスコアのスタイル */
 #timer {
-    font-size: 30px;
+    font-size: 20px;
     color: blue;
     margin-bottom: 10px;
 }
 
 #score {
-    font-size: 30px;
+    font-size: 24px;
     color: green;
     margin-bottom: 10px;
 }
@@ -68,18 +68,13 @@
     border: 1px solid red; /* 枠線 */
     padding: 8px 12px; /* パディング */
     border-radius: 5px; /* 角丸 */
-    display: block; /* 幅を親要素に合わせる */
+    display: block !important; /* 幅を親要素に合わせる */
     height: 40px; /* 高さを固定 */
     line-height: 40px; /* 縦方向のテキスト中央揃え */
     text-align: center; /* テキストを中央揃え */
     visibility: hidden; /* 初期状態で非表示（スペースを確保） */
     opacity: 0; /* 初期状態で透明 */
-    transition: opacity 0.3s ease-in-out; /* 表示/非表示のアニメーション */
-}
-
-#error_message.visible {
-    visibility: visible; /* 表示状態 */
-    opacity: 1; /* 不透明にする */
+    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out; /* 表示/非表示のアニメーション */
 }
 
 /* アニメーションの定義 */
