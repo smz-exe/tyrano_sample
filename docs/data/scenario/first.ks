@@ -30,7 +30,7 @@
 
 ;背景画像の設定
 [image layer="base" page=fore storage="Background.png" width="1280" height="720"]
-[image layer=1 storage=title.png visible=true top=272 left=366 width=548 height=172 ]
+[image layer=1 storage="Title.png" visible=true top=272 left=366 width=548 height=172 ]
 ;ボタンの設定
 [button x=490 y=545 graphic="StartButton.png" target=*first width=300 height=66]
 [s]
