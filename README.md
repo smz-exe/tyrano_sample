@@ -4,12 +4,10 @@
 
 ティラノスクリプトのサンプルコード。
 
-- [テストプレイ](https://appi-github.github.io/tyrano_sample/)
+- [テストプレイ](https://smz-exe.github.io/tyranoscript_am0858/)
 
 ## ライセンス
 
-ここで作成されたスクリプト(`first.ks`)に関しては CC0。ティラノスクリプトについては[配布元](https://tyrano.jp/)のライセンスに従います。`docs/bgimage`以下にあるファイルは、Pexcels からダウンロードしたものです。
+ここで作成されたスクリプト(`first.ks`)に関しては CC0。ティラノスクリプトについては[配布元](https://tyrano.jp/)のライセンスに従います。`docs/data/video/`以下にあるファイルは、「みりんの動画素材」からダウンロードしたものです。
 
-- `run.jpg` by Maksim Romashkin
-- `sleep.jpg` by Andrea Piacquadio
 - `concentration-line03-bk.mp4` by 動画素材：[みりんの動画素材](https://miirriin.com/)

@@ -188,7 +188,7 @@ const randomWords = [
   { kanji: "完全導電性", roman: ["kanzendoudensei","kanzenndoudensei"] },
   { kanji: "相転移現象", roman: ["soutennigenshou","soutennigennshou","soutennigensyou","soutennigennsyou"] },
   { kanji: "マイスナー効果", roman: ["maisuna-kouka"] },
-  { kanji: "完全反磁性", roman: ["kanzenhanjisei","kannzennhannjisei","kanzenhanziisei","kannzennhannzisei"] },
+  { kanji: "完全反磁性", roman: ["kanzenhanjisei","kannzennhannjisei","kanzenhanzisei","kannzennhannzisei"] },
   { kanji: "侵入深さ", roman: ["sinnnyuuhukasa","shinnnyuufukasa"] },
   { kanji: "渦糸構造", roman: ["uzuitokouzou"] },
   { kanji: "磁束量子", roman: ["jisokuryoushi","jisokuryousi"] },
