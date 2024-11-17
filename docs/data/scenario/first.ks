@@ -1,13 +1,13 @@
 *start
 
 ; Setting
-[title name="AM8:57"]
+[title name="AM8:58"]
 @hidemenubutton
 [start_keyconfig]
 [loadcss file="./data/others/css/style.css"]
 
 ;メッセージウィンドウの設定
-[position layer="message0" left=160 top=500 width=1000 height=200 page=fore visible=true]
+[position layer=message0 left=160 top=500 width=1000 height=200 page=fore visible=true]
 
 ;文字が表示される領域を調整
 [position layer=message0 page=fore margint="30" marginl="50" marginr="70" marginb="60"]
@@ -16,14 +16,10 @@
 @layopt layer=message0 visible=true
 
 ;キャラクターの名前が表示される文字領域
-[ptext name="chara_name_area" layer="message0" color="white" size=28 bold=true x=180 y=510]
+[ptext name="chara_name_area" layer=message0 color="white" size=28 bold=true x=180 y=510]
 
 ;上記で定義した領域がキャラクターの名前表示であることを宣言
 [chara_config ptext="chara_name_area"]
-
-;このゲームで登場するキャラクターを宣言
-;K-LMS
-[chara_new name="K-LMS" storage="K-LMS.png" jname="K-LMS" ]
 
 
 ; タイトル画面
@@ -33,11 +29,12 @@
 @layopt layer=message0 visible=false
 
 ;背景画像の設定
-[image layer="base" page=fore storage="Background.png" ]
-[image layer=1 storage=title.png visible=true top=272 left=366 ]
+[image layer="base" page=fore storage="Background.png" width="1280" height="720"]
+[image layer=1 storage=title.png visible=true top=272 left=366 width=548 height=172 ]
 ;ボタンの設定
-[button x=490 y=545 graphic="StartButton.png" target=*first]
+[button x=490 y=545 graphic="StartButton.png" target=*first width=300 height=66]
 [s]
+
 
 ; ゲーム開始
 *first
@@ -48,16 +45,118 @@
 @showmenubutton
 
 ;背景画像の設定
-[bg layer="base" storage="Background.png" time="100"]
+[bg layer="base" storage="bg_white.png" time="100"]
+
+@layopt layer=message0 visible=true
+[wait time=200]
+
+(目覚ましの音が聞こえる)[l][r]
+あぁ、久しぶりによく寝れた。[l][r]
+こんなにも気持ちのいい朝はいつぶりだろう。[p]
+
+. . . . .[l][r]
+何か大事なことを忘れている気がする。[l][r]
+
+@layopt layer=1 visible=true
+[mtext text="ざわ･･" layer=1 x="200" y="100" size="70" in_effect="fadeIn" time="0" color="black" edge="0xffffff" wait="false"]
+[mtext text="ざわ････" layer=1 x="700" y="150" size="80" in_effect="fadeIn" time="10" color="black" edge="0xffffff" wait="false"]
+[mtext text="ざわ･･･" layer=1 x="140" y="300" size="50" in_effect="fadeIn" time="30" color="black" edge="0xffffff" wait="false"]
+[mtext text="ざわ･･" layer=1 x="900" y="350" size="90" in_effect="fadeIn" time="50" color="black" edge="0xffffff" ]
+
+ん〜、何だろう。この感覚は、[p]
+
+. . . . .[l][r]
+まぁ、一旦気にしないことにしよう。[l][r]
+よっぽど大事なことなら、後で思い出すだろう。[p]
+
+とりあえず"K-LLM"のダッシュボードでも見て、今日やるべき課題でも確認するか。[p]
+
+[image layer=1 storage=LoginPage.png visible=true width=960 height=624 x=160 y=96 time=500]
+
+まずは、ログインしよう。[p]
+
+@layopt layer=message0 visible=false
+
+[button graphic="LoginButton.png" target=*DashBoard width=210 height=53 x=535 y=473]
+[s]
+
+*DashBoard
+[cm]
+[camera x=0 y=0 time=0]
+[image layer=1 storage=DashBoard.png visible=true width=960 height=624 x=160 y=96 time=200]
 
 @layopt layer=message0 visible=true
 
+[wait time=100]
 
+. . . . . . . . . . . . . . .[p]
+
+@layopt layer=message0 visible=false
+
+[camera layer=1 wait=true zoom=2 x=360 y=50 ease_type=ease-in time=400]
+[layermode_movie video=concentration-line03-bk.mp4 width=640 height=360]
+
+@layopt layer=message0 visible=true
+
+[font size=36]
+いや、朝9時締め切りの実験レポートあるんだけど!?[l][r]
+完全に忘れてたぁぁ[p]
+[resetfont]
+
+[free_layermode time=400]
+[camera layer=1 zoom=1 x=0 y=0 time=400]
+[reset_camera]
+
+いや、待てよ。[l][r]
+まだ間に合うかもしれない。[l][r]
+今何時だっけ？[p]
+. . . . . . . . . . . . . . .[p]
+
+@layopt layer=message0 visible=false
+
+[camera layer=1 wait=true zoom=2 x=360 y=-300 ease_type=ease-in time=400]
+[layermode_movie video=concentration-line03-bk.mp4 width=640 height=360]
+
+@layopt layer=message0 visible=true
+
+[font size=36]
+いや、今8:58なんだけど!?[l][r]
+締め切りまであと2分しかないんだけど！?[p]
+[resetfont]
+
+[free_layermode time=400]
+[camera layer=1 zoom=1 x=0 y=0 time=400]
+[reset_camera]
+
+. . . . .[l][r]
+まずは、冷静にならないと。[p]
+
+自分のタイピングスピードには自信がある。[l][r]
+「諦めたらそこで試合終了」って誰かも言ってたし。[l][r]
+今からでもワンチャンあるかもしれない。[p]
+
+よし、レポートを書き上げるぞ！[l][r]
+[jump target=*rule]
+[s]
+
+*rule
+[cm]
+@layopt layer=message0 visible=false
+[image layer=1 storage=Rule.png visible=true width=1280 height=720 time=400]
+
+[button graphic="WriteButton.png" target=*report width=236 height=62 x=650 y=550]
+
+[s]
+
+*report
+[cm]
+[freeimage layer=1]
+@layopt layer=message0 visible=false
 
 [html name=container]
 <!-- 画面中央にタイマーとランダムな単語を出題 -->
 <div id="content">
-  <p id="timer">残り時間: 600秒</p>
+  <p id="timer">残り時間: 120秒</p>
   <p id="score">正解数: 0 / 30</p>
   <p id="display_word">超伝導</p>
   <p id="display_roman">tyoudendou</p>
@@ -86,6 +185,33 @@ const randomWords = [
   { kanji: "人工知能", roman: ["jinkoutinou", "jinkouchinou"] },
   { kanji: "機械学習", roman: ["kikaigakusyuu", "kikaigakushuu"] },
   { kanji: "深層学習", roman: ["sinsougakusyuu", "shinsougakushuu"] },
+  { kanji: "完全導電性", roman: ["kanzendoudensei","kanzenndoudensei"] },
+  { kanji: "相転移現象", roman: ["soutennigenshou","soutennigennshou","soutennigensyou","soutennigennsyou"] },
+  { kanji: "マイスナー効果", roman: ["maisuna-kouka"] },
+  { kanji: "完全反磁性", roman: ["kanzenhanjisei","kannzennhannjisei","kanzenhanziisei","kannzennhannzisei"] },
+  { kanji: "侵入深さ", roman: ["sinnnyuuhukasa","shinnnyuufukasa"] },
+  { kanji: "渦糸構造", roman: ["uzuitokouzou"] },
+  { kanji: "磁束量子", roman: ["jisokuryoushi","jisokuryousi"] },
+  { kanji: "磁束のピン止め", roman: ["jisokunopindome","jisokunopinndome"] },
+  { kanji: "ゼロ磁場冷却", roman: ["zerojibareikyaku"] },
+  { kanji: "磁場中冷却", roman: ["jibatyuureikyaku","jibachuureikyaku"] },
+  { kanji: "強誘電体", roman: ["kyouyuudentai"] },
+  { kanji: "チタン酸バリウム", roman: ["titansanbariumu","chitannsannbariumu"] },
+  { kanji: "ペロブスカイト構造", roman: ["perobusukaitokouzou"] },
+  { kanji: "ランダウの現象論", roman: ["randaunogenshouronn"] },
+  { kanji: "光ファイバ", roman: ["hikarifaiba"] },
+  { kanji: "マルチモードファイバ", roman: ["marutimo-dofaiba", "maruchimo-dofaiba"] },
+  { kanji: "シングルモードファイバ", roman: ["singurumo-dofaiba", "shingurumo-dofaiba"] },
+  { kanji: "伝送損失", roman: ["densousonsitu","densousonshitsu"] },
+  { kanji: "散乱損失", roman: ["sanransonsonsitu","sanransonshitsu"] },
+  { kanji: "吸収損失", roman: ["kyuushuusonshitsu","kyuusyuusonsitu"] },
+  { kanji: "モード分散", roman: ["mo-dobunsann", "mo-dobunnsann"] },
+  { kanji: "フーリエ変換", roman: ["fu-riehenkann", "fu-riehennkann"] },
+  { kanji: "アナログデジタル変換", roman: ["anarogudejitaruhenkann","anarogudejitaruhennkann","anarogudezitaruhenkann","anarogudezitaruhennkann"] },
+  { kanji: "デジタルアナログ変換", roman: ["dejitaruanaroguhenkann","dejitaruanaroguhennkann","dezitaruanaroguhenkann","dezitaruanaroguhennkann"] },
+  { kanji: "標本化定理", roman: ["hyouhonkateiri","hyouhonnkateiri"] },
+  { kanji: "パワースペクトル", roman: ["pawa-supekutoru"] },
+  { kanji: "サンプルホールド回路", roman: ["sanpuruho-rudokairo","sannpuruho-rudokairo"] },
 ];
 
 // 現在の問題番号
@@ -95,8 +221,25 @@ let currentQuestionIndex = 1;
 let correctCount = 0;
 
 // タイマー
-let timeLeft = 600;
+let timeLeft = 120;
 let timerInterval;
+
+// レポートのスコア、および評価を計算する関数
+const calculateGrade = () => {
+  TYRANO.kag.variable.sf.score = TYRANO.kag.variable.sf.lefttime * 200; // スコア計算
+  const leftTime = TYRANO.kag.variable.sf.lefttime;
+
+  // 残り時間に応じた評価
+  if (leftTime >= 51) {
+    TYRANO.kag.variable.sf.grade = "S";
+  } else if (leftTime >= 31) {
+    TYRANO.kag.variable.sf.grade = "A";
+  } else if (leftTime >= 11) {
+    TYRANO.kag.variable.sf.grade = "B";
+  } else {
+    TYRANO.kag.variable.sf.grade = "C";
+  }
+};
 
 // タイマーを停止する関数
 const stopTimer = () => {
@@ -105,7 +248,8 @@ const stopTimer = () => {
     timerInterval = null;
   }
   // 残り時間をスコアとして保存
-  TYRANO.kag.variable.sf.score = timeLeft; // ティラノスクリプトの変数にスコアを保存
+  TYRANO.kag.variable.sf.lefttime = timeLeft;
+  calculateGrade(); // スコアと評価を計算
 };
 
 // テキストボックスにフォーカスを当てる
@@ -245,191 +389,64 @@ $('#user_input').on('input', function () {
 *clear
 [cm]
 @layopt layer=message0 visible=true
-終わった！締め切りまでにレポートを書き上げた！[l][r]
-まだあと[emb exp="sf.score"]秒残ってる！[p]
-[call target=*correct]
+終わった！締め切りまでにレポートを書き上げた！[p]
+まだあと[emb exp="sf.lefttime"]秒残ってる！[l][r]
+スコアは[emb exp="sf.score"]だ！[l][r]
+評価は[emb exp="sf.grade"]だ！[p]
+
+@layopt layer=message0 visible=false
+
+[html name=container]
+<div style="width: auto; margin: 20px auto; padding: 20px; border: 2px solid #333; border-radius: 10px; background-color: #f5f5f5;">
+  <h1 style="text-align: center; color: #4caf50;">実験レポート フィードバック</h1>
+  <p style="font-size: 18px; line-height: 1.6; color: #333;">
+    実験レポートお疲れ様でした。<br>
+    締め切りまでの残り時間は、 <strong style="color: #ff5722;">[emb exp="sf.lefttime"] 秒</strong> でした。<br>
+    スコアは <strong style="color: #2196f3;">[emb exp="sf.score"]</strong> です。
+  </p>
+  <h2 style="text-align: center; color: #673ab7;">実験レポート評価: <span style="font-size: 28px; font-weight: bold; color: #e91e63;">[emb exp="sf.grade"]</span></h2>
+  <hr style="margin: 20px 0; border: none; border-top: 2px solid #ccc;">
+  <!-- 戻るボタン -->
+  <div style="text-align: center; margin-top: 20px;">
+    <button onclick="TYRANO.kag.ftag.startTag('jump', {target: '*end'})"
+            style="background-color: #4caf50; color: white; font-size: 18px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+      戻る
+    </button>
+  </div>
+</div>
+[endhtml]
+[s]
+
+
+*end
+[cm]
+@layopt layer=message0 visible=true
+無事レポートを提出できた。[l][r]
+一安心だ。[l][r]
+【 GOOD END 】[p]
+
+[jump target=*start]
+[s]
+
 
 
 *timeout
 [cm]
 @layopt layer=message0 visible=true
+(時計は9:00を指している)[l][r]
+時間切れだ...[l][r]
 あぁ、遅レポが確定してしまった...[p]
-[call target=*correct]
 
+自分のタイピングスピードを過信するのはもうやめよう。[l][r]
+何事も計画的に進める、そう心に誓った。[p]
 
-*correct
-[cm]
-@layopt layer=message0 visible=true
-テスト終了[p]
+【 BAD END 】[l][r]
 
+[button graphic="RetryButton.png" target=*rule width=236 height=62 x=335 y=400]
+[button graphic="RestartButton.png" target=*start width=236 height=62 x=760 y=400]
 
-[layopt layer="0" visible=true]
-[image storage="folder1/icon1.png" layer="0" x="540" y="300" name="icon1" time="100" width="100" height="100" ]
-
-[wait time=200]
-[cm]
-
-サブルーチンを呼び出します。[l][r]
-
-[call target=*subroutine]
-
-サブルーチンを呼び出しました。[p]
-[call target=*body]
-
-
-*subroutine
-
-これはサブルーチンです。[l][r]
-
-クリックをすると呼び出し元に戻ります。[p]
-
-[return]
-
-
-*body
-選択肢を表示します。[l][r]
-
-[link target=*select_1]【1】選択肢 その1  [endlink][r]
-[link target=*select_2]【2】選択肢 その2  [endlink][r]
 [s]
 
-*select_1
-[cm]
-
-選択肢1を選択しました。[l]
-@jump target=*common
-
-*select_2
-[cm]
-
-選択肢2を選択しました。[l]
-@jump target=*common
-
-*common
-[cm]
-共通ルートです。[p]
-
-好きな方を選んでください。[l][r]
-
-[locate x=100 y=200]
-[button graphic="icon1.png" target=*tag_1 width=100 height=100]
-[button x=300 y=200 graphic="icon2.png" target=*tag_2 width=100 height=100]
-[s]
-
-*tag_1
-[cm]
-選択肢1を選択しました。[l]
-@jump target=*tag_common
-
-*tag_2
-[cm]
-選択肢2を選択しました。[l]
-@jump target=*tag_common
-
-*tag_common
-[cm]
-共通ルートです。[p]
 
 
 
-#
-さて、ゲームが簡単に作れるというから、来てみたものの[p]
-
-誰もいねぇじゃねぇか。[p]
-……[p]
-帰るか。。。[p]
-
-[font size="50" ]
-#?
-ちょっとまったーーーーー[p]
-[resetfont ]
-
-#
-誰だ！？[p]
-
-;キャラクター登場
-[chara_show name="K-LMS" ]
-#?
-こんにちは。[p]
-
-(中略)[l][r]
-
-[cm]
-
-;メッセージウィンドウの高さを変更する
-[position height=160 top=430]
-
-[3d_init]
-
-;ティラノの背景変更タグ
-[bg storage="run.jpg"]
-
-
-;3Dの箱を定義する
-[3d_box_new name="mybox" width=100 height=100 depth=100 scale=2 color="0x00ff00" ]
-
-;定義した箱を実際に画面に表示する
-[3d_show name="mybox"]
-3Dモデル(緑の箱)を表示[p]
-
-[3d_anim name="mybox" pos="-377,-678,-1311" rot="-5,-0.41,300" scale="2"  ]
-緑の箱を移動
-
-;gLTFファイルを指定する
-[3d_model_new name="AnimatedMorphSphere" storage="AnimatedMorphSphere/AnimatedMorphSphere.gltf" ]
-[3d_show name="AnimatedMorphSphere" ]
-
-3Dモデル(アニメーション付き)を表示[p]
-
-[3d_anim name="mybox" pos="100,200,40" rot="3000,3000,200" scale="20"  ]
-
-[3d_anim name="camera" pos="-481,1777,-274" rot="-0.92,0.06,0" scale="1,1,1" ]
-カメラのアニメーション[p]
-
-緑の箱のデバッグを開始[p]
-[3d_debug name="mybox"]
-
-
-カメラのデバッグを開始[p]
-[3d_debug_camera ]
-
-
-[3d_anim name="mybox" pos="-377,-678,-1311" rot="-0.15,-0.41,0" scale="2"  ]
-
-
-[3d_camera pos="345,-32,1000" rot="0.03,0.6,0" scale="1,1,1" ]
-
-[l][r]
-
-
-ああ、何もかも、ばかばかしい。私は、醜い裏切り者だ。どうとも、勝手にするがよい。やんぬる哉。[l][r]
-メロスは...[l][r]
-
-[link target=*tag_sleep] →寝る [endlink][r]
-[link target=*tag_run] →走る [endlink][r]
-[s]
-
-*tag_sleep
-
-[cm]
-
-[bg storage=sleep.jpg time=500]
-
-メロスは死んだように深く眠った。[l][r]
-勇者は、ひどく赤面した。[r]
-
-【 BAD END 】[l][cm]
-
-[jump target=*start]
-
-*tag_run
-
-[bg storage=run.jpg time=500]
-
-[cm]
-メロスは黒い風のように走った。[l][r]
-陽は、ゆらゆら地平線に没し、まさに最後の一片の残光も、消えようとした時、メロスは疾風の如く刑場に突入した。間に合った。[r]
-
-【 GOOD END 】[l][cm]
-
-[jump target=*start]
