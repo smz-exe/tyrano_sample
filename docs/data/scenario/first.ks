@@ -203,7 +203,7 @@ const randomWords = [
   { kanji: "マルチモードファイバ", roman: ["marutimo-dofaiba", "maruchimo-dofaiba"] },
   { kanji: "シングルモードファイバ", roman: ["singurumo-dofaiba", "shingurumo-dofaiba"] },
   { kanji: "伝送損失", roman: ["densousonsitu","densousonshitsu"] },
-  { kanji: "散乱損失", roman: ["sanransonsonsitu","sanransonshitsu"] },
+  { kanji: "散乱損失", roman: ["sanransonsitu","sanransonshitsu","sannrannsonnsitu",sannrannsonnshitsu] },
   { kanji: "吸収損失", roman: ["kyuushuusonshitsu","kyuusyuusonsitu"] },
   { kanji: "モード分散", roman: ["mo-dobunsann", "mo-dobunnsann"] },
   { kanji: "フーリエ変換", roman: ["fu-riehenkann", "fu-riehennkann","hu-riehenkann","hu-riehennkann"] },
