@@ -258,7 +258,7 @@ const focusInput = () => $('#user_input').focus();
 // 出題リストを作成
 const createQuestionList = () => {
   const questionList = [];
-  const randomPool = [...randomWords]; // ランダム単語のコピー
+  const randomPool = [...randomWords];
 
   for (let i = 1; i <= 30; i++) {
     if (fixedWords[i]) {
@@ -266,8 +266,8 @@ const createQuestionList = () => {
     } else {
       // ランダム単語を選択
       const randomIndex = Math.floor(Math.random() * randomPool.length);
-      questionList.push(randomPool.splice(randomIndex, 1)[0]); // ランダムに選んで削除
-      if (randomPool.length === 0) randomPool.push(...randomWords); // ランダムプールを補充
+      questionList.push(randomPool.splice(randomIndex, 1)[0]);
+      if (randomPool.length === 0) randomPool.push(...randomWords);
     }
   }
 
@@ -290,13 +290,13 @@ const selectNextWord = () => {
 
   currentWord = questionList[currentQuestionIndex - 1]; // 現在の問題を更新
   currentRomanCandidate = currentWord.roman[0]; // デフォルト候補を設定
-  $('#display_word').text(currentWord.kanji); // 日本語を表示
-  $('#display_roman').text(currentRomanCandidate); // ローマ字を表示
-  $('#user_input').val(""); // 入力欄をクリア
-  $('#colored_input').html(""); // 色分け結果をクリア
+  $('#display_word').text(currentWord.kanji);
+  $('#display_roman').text(currentRomanCandidate);
+  $('#user_input').val("");
+  $('#colored_input').html("");
   $('#error_message').css('visibility', 'hidden').css('opacity', 0);
 
-  currentQuestionIndex += 1; // 問題番号を進める
+  currentQuestionIndex += 1;
 };
 
 // タイマーを開始する関数
@@ -342,8 +342,8 @@ $('#user_input').on('keydown', function (e) {
 
 // リアルタイムで入力をチェック
 $('#user_input').on('input', function () {
-  const userInput = $(this).val(); // ユーザーの入力値を取得
-  const coloredInputDiv = $('#colored_input'); // 色分け結果を表示するエリア
+  const userInput = $(this).val();
+  const coloredInputDiv = $('#colored_input');
   const errorMessage = $('#error_message');
 
   // 入力が正常な場合、エラーメッセージを非表示
@@ -353,8 +353,8 @@ $('#user_input').on('input', function () {
   if (!currentRomanCandidate.startsWith(userInput)) {
     const alternateRoman = currentWord.roman.find((r) => r.startsWith(userInput));
     if (alternateRoman) {
-      currentRomanCandidate = alternateRoman; // 表示候補を変更
-      $('#display_roman').text(currentRomanCandidate); // 表示を更新
+      currentRomanCandidate = alternateRoman;
+      $('#display_roman').text(currentRomanCandidate);
     }
   }
 
