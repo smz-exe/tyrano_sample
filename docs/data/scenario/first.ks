@@ -4,7 +4,7 @@
 [title name="AM8:58"]
 @hidemenubutton
 [start_keyconfig]
-[loadcss file="./data/others/css/style.css"]
+[loadcss file="./data/others/css/styles.css"]
 
 ;メッセージウィンドウの設定
 [position layer=message0 left=160 top=500 width=1000 height=200 page=fore visible=true]
@@ -15,34 +15,33 @@
 ;メッセージウィンドウの表示
 @layopt layer=message0 visible=true
 
-;キャラクターの名前が表示される文字領域
-[ptext name="chara_name_area" layer=message0 color="white" size=28 bold=true x=180 y=510]
-
-;上記で定義した領域がキャラクターの名前表示であることを宣言
-[chara_config ptext="chara_name_area"]
-
 
 ; タイトル画面
 *title
+[cm]
 [wait time=200]
-; メッセージレイヤーの非表示
 @layopt layer=message0 visible=false
 
 ;背景画像の設定
 [image layer="base" page=fore storage="Background.png" width="1280" height="720"]
-[image layer=1 storage="Title.png" visible=true top=272 left=366 width=548 height=172 ]
+[image layer=1 storage="Title.png" visible=true top=285 left=366 width=548 height=150 ]
 ;ボタンの設定
-[button x=490 y=545 graphic="StartButton.png" target=*first width=300 height=66]
+[button x=130 y=576 graphic="StoryButton.png" target=*first width=300 height=66]
+[button x=490 y=576 graphic="WriteButton2.png" target=*rule width=300 height=66]
+[button x=850 y=576 graphic="RankingButton.png" target=*ranking width=300 height=66]
 [s]
 
+
+*ranking
+[cm]
+[freeimage layer=1]
+@jump storage=ranking.ks target=*start
 
 ; ゲーム開始
 *first
 [cm]
 [freeimage layer=1]
 
-;メニューボタンの表示
-@showmenubutton
 
 ;背景画像の設定
 [bg layer="base" storage="bg_white.png" time="100"]
@@ -93,7 +92,7 @@
 
 @layopt layer=message0 visible=false
 
-[layermode_movie video="concentration-line03-bk.mp4" width=640 height=360 ]
+[layermode_movie video="concentration-line03-bk.mp4" width=640 height=360]
 [camera layer=1 wait=false zoom=2 x=360 y=50 ease_type=ease-in time=400]
 
 @layopt layer=message0 visible=true
@@ -260,7 +259,7 @@ const createQuestionList = () => {
   const questionList = [];
   const randomPool = [...randomWords]; // ランダム単語のコピー
 
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= 2; i++) {
     if (fixedWords[i]) {
       questionList.push(fixedWords[i]); // 固定単語を追加
     } else {
@@ -406,6 +405,18 @@ $('#user_input').on('input', function () {
   </p>
   <h2 style="text-align: center; color: #673ab7;">実験レポート評価: <span style="font-size: 28px; font-weight: bold; color: #e91e63;">[emb exp="sf.grade"]</span></h2>
   <hr style="margin: 20px 0; border: none; border-top: 2px solid #ccc;">
+
+  <!-- ランキング登録フォーム -->
+  <div style="text-align: center; margin-top: 20px;">
+    <p style="font-size: 16px; color: #555;">ランキングに登録するにはプレイヤー名を入力してください:</p>
+    <input type="text" id="player_name" placeholder="プレイヤー名を入力" style="font-size: 18px; padding: 5px; width: 80%; max-width: 300px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    <button onclick="submitScore()"
+            style="background-color: #2196f3; color: white; font-size: 18px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+      ランキングに登録
+    </button>
+    <p id="submission_status" style="font-size: 16px; color: green; display: none; margin-top: 10px;">スコアが登録されました！</p>
+  </div>
+
   <!-- 戻るボタン -->
   <div style="text-align: center; margin-top: 20px;">
     <button onclick="TYRANO.kag.ftag.startTag('jump', {target: '*end'})"
@@ -414,6 +425,49 @@ $('#user_input').on('input', function () {
     </button>
   </div>
 </div>
+
+<script>
+function submitScore() {
+  const playerName = document.getElementById("player_name").value.trim();
+  const score = TYRANO.kag.variable.sf.score;
+  const time = TYRANO.kag.variable.sf.lefttime;
+  const grade = TYRANO.kag.variable.sf.grade;
+  const statusMessage = document.getElementById("submission_status");
+
+  if (!playerName) {
+    alert("プレイヤー名を入力してください！");
+    return;
+  }
+
+  fetch("https://calico-jeweled-stone.glitch.me/result", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      player_name: playerName,
+      score: score,
+      time: time,
+      grade: grade
+    })
+  })
+    .then(response => {
+      if (response.ok) {
+        statusMessage.style.color = "green";
+        statusMessage.textContent = "スコアが登録されました！";
+        statusMessage.style.display = "block";
+      } else {
+        throw new Error("スコアの登録に失敗しました。");
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      statusMessage.style.color = "red";
+      statusMessage.textContent = "スコアの登録に失敗しました。";
+      statusMessage.style.display = "block";
+    });
+}
+</script>
 [endhtml]
 [s]
 
