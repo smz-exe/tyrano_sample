@@ -15,7 +15,7 @@
   <div class="ranking-container">
     <h1>ランキング</h1>
     <div id="ranking-table-container">
-      <p class="loading">ランキングを読み込んでいます...</p>
+      <p class="loading">ランキングを読み込んでいます...(20秒ほど時間がかかる場合があります)</p>
     </div>
     <button onclick="TYRANO.kag.ftag.startTag('jump',{storage:'first.ks', target: '*title'})"
             class="back-button">

@@ -19,6 +19,7 @@
 ; タイトル画面
 *title
 [cm]
+[freeimage layer=1]
 [wait time=200]
 @layopt layer=message0 visible=false
 
@@ -41,7 +42,6 @@
 *first
 [cm]
 [freeimage layer=1]
-
 
 ;背景画像の設定
 [bg layer="base" storage="bg_white.png" time="100"]
@@ -140,6 +140,7 @@
 
 *rule
 [cm]
+[freeimage layer=1]
 @layopt layer=message0 visible=false
 [image layer=1 storage=Rule.png visible=true width=1280 height=720 time=400]
 
@@ -225,7 +226,7 @@ let timerInterval;
 
 // レポートのスコア、および評価を計算する関数
 const calculateGrade = () => {
-  TYRANO.kag.variable.sf.score = TYRANO.kag.variable.sf.lefttime * 200; // スコア計算
+  TYRANO.kag.variable.sf.score = TYRANO.kag.variable.sf.lefttime * 200;
   const leftTime = TYRANO.kag.variable.sf.lefttime;
 
   // 残り時間に応じた評価
@@ -259,7 +260,7 @@ const createQuestionList = () => {
   const questionList = [];
   const randomPool = [...randomWords]; // ランダム単語のコピー
 
-  for (let i = 1; i <= 2; i++) {
+  for (let i = 1; i <= 30; i++) {
     if (fixedWords[i]) {
       questionList.push(fixedWords[i]); // 固定単語を追加
     } else {
@@ -293,7 +294,7 @@ const selectNextWord = () => {
   $('#display_roman').text(currentRomanCandidate); // ローマ字を表示
   $('#user_input').val(""); // 入力欄をクリア
   $('#colored_input').html(""); // 色分け結果をクリア
-  $('#error_message').css('visibility', 'hidden').css('opacity', 0); // エラーメッセージを非表示
+  $('#error_message').css('visibility', 'hidden').css('opacity', 0);
 
   currentQuestionIndex += 1; // 問題番号を進める
 };
@@ -305,7 +306,6 @@ const startTimer = () => {
     $('#timer').text(`残り時間: ${timeLeft}秒`);
     if (timeLeft <= 0) {
       stopTimer();
-      alert("時間切れです！");
       TYRANO.kag.ftag.startTag("jump", { target: "*timeout" });
     }
   }, 1000);
@@ -328,15 +328,15 @@ const updateScore = () => {
 // 入力エラーハンドリング（文字数制限）
 $('#user_input').on('keydown', function (e) {
   const userInput = $(this).val();
-  const maxRomanLength = Math.max(...currentWord.roman.map((r) => r.length)); // 最大文字数
-  const errorMessage = $('#error_message'); // エラーメッセージエリア
+  const maxRomanLength = Math.max(...currentWord.roman.map((r) => r.length));
+  const errorMessage = $('#error_message');
 
   if (userInput.length >= maxRomanLength && e.key !== 'Backspace') {
     e.preventDefault(); // 入力を無効化
     errorMessage.text("これ以上は入力出来ません");
-    errorMessage.css('visibility', 'visible').css('opacity', 1); // 表示
+    errorMessage.css('visibility', 'visible').css('opacity', 1);
   } else {
-    errorMessage.css('visibility', 'hidden').css('opacity', 0); // 非表示
+    errorMessage.css('visibility', 'hidden').css('opacity', 0);
   }
 });
 
@@ -344,7 +344,7 @@ $('#user_input').on('keydown', function (e) {
 $('#user_input').on('input', function () {
   const userInput = $(this).val(); // ユーザーの入力値を取得
   const coloredInputDiv = $('#colored_input'); // 色分け結果を表示するエリア
-  const errorMessage = $('#error_message'); // エラーメッセージエリア
+  const errorMessage = $('#error_message');
 
   // 入力が正常な場合、エラーメッセージを非表示
   errorMessage.css('visibility', 'hidden').css('opacity', 0);
@@ -396,78 +396,31 @@ $('#user_input').on('input', function () {
 @layopt layer=message0 visible=false
 
 [html name=container]
-<div style="width: auto; margin: 20px auto; padding: 20px; border: 2px solid #333; border-radius: 10px; background-color: #f5f5f5;">
-  <h1 style="text-align: center; color: #4caf50;">実験レポート フィードバック</h1>
-  <p style="font-size: 18px; line-height: 1.6; color: #333;">
+<div class="feedback-container">
+  <h1>実験レポート フィードバック</h1>
+  <p class="feedback-text">
     実験レポートお疲れ様でした。<br>
-    締め切りまでの残り時間は、 <strong style="color: #ff5722;">[emb exp="sf.lefttime"] 秒</strong> でした。<br>
-    スコアは <strong style="color: #2196f3;">[emb exp="sf.score"]</strong> です。
+    締め切りまでの残り時間は、 <strong class="time-remaining">[emb exp="sf.lefttime"] 秒</strong> でした。<br>
+    スコアは <strong>[emb exp="sf.score"]</strong> です。
   </p>
-  <h2 style="text-align: center; color: #673ab7;">実験レポート評価: <span style="font-size: 28px; font-weight: bold; color: #e91e63;">[emb exp="sf.grade"]</span></h2>
-  <hr style="margin: 20px 0; border: none; border-top: 2px solid #ccc;">
+  <h2>実験レポート評価: <span class="grade">[emb exp="sf.grade"]</span></h2>
+  <hr>
 
   <!-- ランキング登録フォーム -->
-  <div style="text-align: center; margin-top: 20px;">
-    <p style="font-size: 16px; color: #555;">ランキングに登録するにはプレイヤー名を入力してください:</p>
-    <input type="text" id="player_name" placeholder="プレイヤー名を入力" style="font-size: 18px; padding: 5px; width: 80%; max-width: 300px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
-    <button onclick="submitScore()"
-            style="background-color: #2196f3; color: white; font-size: 18px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
-      ランキングに登録
-    </button>
-    <p id="submission_status" style="font-size: 16px; color: green; display: none; margin-top: 10px;">スコアが登録されました！</p>
+  <div class="ranking-form">
+    <p>ランキングに登録するにはプレイヤー名を入力してください:</p>
+    <input type="text" id="player_name" placeholder="プレイヤー名を入力">
+    <button id="submit_button" onclick="submitScore()">ランキングに登録</button>
+    <p id="submission_status">スコアが登録されました！</p>
   </div>
 
   <!-- 戻るボタン -->
-  <div style="text-align: center; margin-top: 20px;">
-    <button onclick="TYRANO.kag.ftag.startTag('jump', {target: '*end'})"
-            style="background-color: #4caf50; color: white; font-size: 18px; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
-      戻る
-    </button>
-  </div>
+  <a href="#" class="back-button" onclick="TYRANO.kag.ftag.startTag('jump', {target: '*end'})">
+    戻る
+  </a>
 </div>
 
-<script>
-function submitScore() {
-  const playerName = document.getElementById("player_name").value.trim();
-  const score = TYRANO.kag.variable.sf.score;
-  const time = TYRANO.kag.variable.sf.lefttime;
-  const grade = TYRANO.kag.variable.sf.grade;
-  const statusMessage = document.getElementById("submission_status");
-
-  if (!playerName) {
-    alert("プレイヤー名を入力してください！");
-    return;
-  }
-
-  fetch("https://calico-jeweled-stone.glitch.me/result", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      player_name: playerName,
-      score: score,
-      time: time,
-      grade: grade
-    })
-  })
-    .then(response => {
-      if (response.ok) {
-        statusMessage.style.color = "green";
-        statusMessage.textContent = "スコアが登録されました！";
-        statusMessage.style.display = "block";
-      } else {
-        throw new Error("スコアの登録に失敗しました。");
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      statusMessage.style.color = "red";
-      statusMessage.textContent = "スコアの登録に失敗しました。";
-      statusMessage.style.display = "block";
-    });
-}
-</script>
+<script src="./data/others/feedback.js"></script>
 [endhtml]
 [s]
 
@@ -486,6 +439,8 @@ function submitScore() {
 
 *timeout
 [cm]
+[bg layer="base" storage="GameOver.png" time="100" width="1280" height="720"]
+[image layer=1 storage="am9.png" visible=true top=250 left=734 width=301 height=103 time=100]
 @layopt layer=message0 visible=true
 (時計は9:00を指している)[l][r]
 時間切れだ...[l][r]

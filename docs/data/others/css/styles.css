@@ -1,60 +1,74 @@
 /* 全体のスタイル設定 */
 .container {
-    position: fixed !important;
     width: 1280px;
     height: 720px;
+    margin: 0 auto;
     display: flex;
-    justify-content: center; /* 水平方向の中央揃え */
-    align-items: center; /* 垂直方向の中央揃え */
-    font-family: Arial, sans-serif; /* 全体のフォント */
-    margin: auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* 全体の背景色 */
+    color: #333; /* テキストの標準色 */
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* はみ出しを防止 */
+    padding: 20px;
 }
 
 /* コンテンツのスタイル */
 #content {
     text-align: center;
-    font-size: 64px;
-    background-color: #f9f9f9;
+    font-size: 48px;
+    padding: 20px;
 }
 
 /* タイマーやスコアのスタイル */
-#timer {
-    font-size: 20px;
-    color: blue;
+#timer,
+#score {
+    font-size: 24px;
     margin-bottom: 10px;
 }
 
+#timer {
+    color: #2196f3;
+}
+
 #score {
-    font-size: 24px;
-    color: green;
-    margin-bottom: 10px;
+    color: #4caf50;
 }
 
 /* 単語表示部分 */
 #display_word {
     margin-bottom: 10px;
+    font-size: 64px;
+    font-weight: bold;
+    color: #333;
 }
 
 #display_roman {
-    font-size: 32px;
-    color: gray;
+    font-size: 24px;
+    color: #757575;
 }
 
 /* 入力欄 */
 #user_input {
     font-size: 32px;
     width: 300px;
-    padding: 5px;
+    padding: 10px;
     margin-top: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    color: #333;
 }
 
 /* 色分け結果表示のスタイル */
 #colored_input {
     font-size: 30px;
-    margin-top: 20px;
+    margin-top: 15px;
     white-space: pre;
     height: 40px;
     overflow: hidden;
@@ -62,46 +76,25 @@
 
 /* エラーメッセージのスタイル */
 #error_message {
-    font-size: 20px;
-    color: red;
-    background-color: #ffe6e6;
-    border: 1px solid red;
-    padding: 8px 12px;
+    font-size: 16px;
+    color: #d32f2f;
+    background-color: #ffebee;
+    border: 1px solid #d32f2f;
+    padding: 10px 15px;
     border-radius: 5px;
-    display: block !important;
-    height: 40px;
-    line-height: 40px;
     text-align: center;
     visibility: hidden;
     opacity: 0;
-    transition: opacity 0.1s ease-in-out, visibility 0.1s ease-in-out;
-}
-
-/* アニメーションの定義 */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
 }
 
 .ranking-container {
     width: 90%;
     max-width: 800px;
-    background-color: white;
+    background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
-    color: #4caf50;
-    margin-bottom: 20px;
 }
 
 table {
@@ -112,21 +105,161 @@ table {
 
 table th,
 table td {
-    border: 1px solid #ccc;
+    border: 1px solid #e0e0e0;
     padding: 10px;
     text-align: center;
 }
 
 table th {
-    background-color: #f0f0f0;
+    background-color: #f5f5f5;
     font-weight: bold;
+}
+
+/* ボタンの基本スタイル */
+button {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 有効なボタン */
+button {
+    background-color: #2196f3;
+    color: #fff;
+}
+
+button:hover {
+    background-color: #1976d2;
+}
+
+/* 無効なボタン */
+button:disabled {
+    background-color: #b0bec5;
+    color: #eceff1;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.loading {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+}
+
+/* フィードバック画面 */
+.feedback-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-text {
+    font-size: 18px;
+    line-height: 1.5;
+    color: #444;
+}
+
+.feedback-text strong {
+    color: #333;
+    font-weight: bold;
+}
+
+.feedback-text .time-remaining {
+    color: #555;
+}
+
+h1 {
+    text-align: center;
+    color: #222;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    font-size: 20px;
+    margin-top: 16px;
+}
+
+h2 .grade {
+    font-size: 28px;
+    font-weight: bold;
+    color: #e91e63;
+}
+
+hr {
+    margin: 20px 0;
+    border: none;
+    border-top: 2px solid #e0e0e0;
+}
+
+/* ランキング登録フォーム */
+.ranking-form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.ranking-form p {
+    font-size: 16px;
+    color: #757575;
+    margin-bottom: 10px;
+}
+
+.ranking-form input {
+    font-size: 18px;
+    padding: 5px;
+    width: 80%;
+    max-width: 300px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#submit_button {
+    background-color: #2196f3;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+#submit_button:hover {
+    background-color: #1976d2;
+}
+
+#submit_button:disabled {
+    background-color: #b0bec5;
+    color: #eceff1;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 .back-button {
     display: block;
     width: 100%;
     max-width: 200px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 10px 20px;
     background-color: #2196f3;
     color: white;
@@ -135,14 +268,17 @@ table th {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .back-button:hover {
     background-color: #1976d2;
+    color: white;
 }
 
-.loading {
-    text-align: center;
-    font-size: 18px;
-    color: #666;
+#submission_status {
+    font-size: 16px;
+    color: green;
+    display: none;
+    margin-top: 10px;
 }
