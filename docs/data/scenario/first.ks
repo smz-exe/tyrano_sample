@@ -169,9 +169,9 @@
 [iscript]
 // 固定の単語リスト
 const fixedWords = {
-  1: { kanji: "実験目的", roman: ["jikkenmokuteki", "jikkennmokuteki"] },
-  5: { kanji: "実験原理", roman: ["jikkengenri", "jikkenngenri"] },
-  9: { kanji: "実験方法", roman: ["jikkenhouhou", "jikkennhouhou"] },
+  1: { kanji: "実験目的", roman: ["jikkenmokuteki", "jikkennmokuteki","zikkenmokuteki","zikkennmokuteki"] },
+  5: { kanji: "実験原理", roman: ["jikkengenri", "jikkenngennri","zikkengenri","zikkenngennri"] },
+  9: { kanji: "実験方法", roman: ["jikkenhouhou", "jikkennhouhou","zikkenhouhou","zikkennhouhou"] },
   13: { kanji: "実験結果", roman: ["jikkenkekka", "jikkennkekka"] },
   18: { kanji: "考察", roman: ["kousatu", "kosatsu"] },
   24: { kanji: "結論", roman: ["keturonn", "ketsuronn"] },
@@ -191,45 +191,47 @@ const randomWords = [
   { kanji: "完全反磁性", roman: ["kanzenhanjisei","kannzennhannjisei","kanzenhanzisei","kannzennhannzisei"] },
   { kanji: "侵入深さ", roman: ["sinnnyuuhukasa","shinnnyuufukasa"] },
   { kanji: "渦糸構造", roman: ["uzuitokouzou"] },
-  { kanji: "磁束量子", roman: ["jisokuryoushi","jisokuryousi"] },
+  { kanji: "磁束量子", roman: ["jisokuryousi","jisokuryoushi"] },
   { kanji: "磁束のピン止め", roman: ["jisokunopindome","jisokunopinndome"] },
   { kanji: "ゼロ磁場冷却", roman: ["zerojibareikyaku"] },
   { kanji: "磁場中冷却", roman: ["jibatyuureikyaku","jibachuureikyaku"] },
   { kanji: "強誘電体", roman: ["kyouyuudentai"] },
   { kanji: "チタン酸バリウム", roman: ["titansanbariumu","chitannsannbariumu"] },
   { kanji: "ペロブスカイト構造", roman: ["perobusukaitokouzou"] },
-  { kanji: "ランダウの現象論", roman: ["randaunogenshouronn","randaunogensyouron"] },
+  { kanji: "ランダウの現象論", roman: ["randaunogensyouronn","randaunogenshouron"] },
   { kanji: "光ファイバ", roman: ["hikarifaiba"] },
   { kanji: "マルチモードファイバ", roman: ["marutimo-dofaiba", "maruchimo-dofaiba"] },
   { kanji: "シングルモードファイバ", roman: ["singurumo-dofaiba", "shingurumo-dofaiba"] },
   { kanji: "伝送損失", roman: ["densousonsitu","densousonshitsu"] },
   { kanji: "散乱損失", roman: ["sanransonsitu","sanransonshitsu","sannrannsonnsitu","sannrannsonnshitsu"] },
-  { kanji: "吸収損失", roman: ["kyuushuusonshitsu","kyuusyuusonsitu"] },
+  { kanji: "吸収損失", roman: ["kyuusyuusonsitu","kyuushuusonshitsu"] },
   { kanji: "モード分散", roman: ["mo-dobunsann", "mo-dobunnsann"] },
-  { kanji: "フーリエ変換", roman: ["fu-riehenkann", "fu-riehennkann","hu-riehenkann","hu-riehennkann"] },
+  { kanji: "フーリエ変換", roman: ["hu-riehenkann", "fu-riehennkann","fu-riehenkann","hu-riehennkann"] },
   { kanji: "アナログデジタル変換", roman: ["anarogudejitaruhenkann","anarogudejitaruhennkann","anarogudezitaruhenkann","anarogudezitaruhennkann"] },
   { kanji: "デジタルアナログ変換", roman: ["dejitaruanaroguhenkann","dejitaruanaroguhennkann","dezitaruanaroguhenkann","dezitaruanaroguhennkann"] },
   { kanji: "標本化定理", roman: ["hyouhonkateiri","hyouhonnkateiri"] },
   { kanji: "パワースペクトル", roman: ["pawa-supekutoru"] },
   { kanji: "サンプルホールド回路", roman: ["sanpuruho-rudokairo","sannpuruho-rudokairo"] },
+  { kanji: "増幅器", roman: ["zouhukuki"] },
+  { kanji: "ハイパスフィルタ", roman: ["haipasufiruta"] },
+  { kanji: "ローパスフィルタ", roman: ["ro-pasufiruta"] },
+  { kanji: "ノッチフィルタ", roman: ["nottifiruta","nocchifiruta"] },
 ];
 
-// 現在の問題番号
+
 let currentQuestionIndex = 1;
 
-// 現在の正解数
+
 let correctCount = 0;
 
-// タイマー
+
 let timeLeft = 120;
 let timerInterval;
 
-// レポートのスコア、および評価を計算する関数
 const calculateGrade = () => {
   TYRANO.kag.variable.sf.score = TYRANO.kag.variable.sf.lefttime * 200;
   const leftTime = TYRANO.kag.variable.sf.lefttime;
 
-  // 残り時間に応じた評価
   if (leftTime >= 51) {
     TYRANO.kag.variable.sf.grade = "S";
   } else if (leftTime >= 31) {
@@ -332,7 +334,7 @@ $('#user_input').on('keydown', function (e) {
   const errorMessage = $('#error_message');
 
   if (userInput.length >= maxRomanLength && e.key !== 'Backspace') {
-    e.preventDefault(); // 入力を無効化
+    e.preventDefault();
     errorMessage.text("これ以上は入力出来ません");
     errorMessage.css('visibility', 'visible').css('opacity', 1);
   } else {
